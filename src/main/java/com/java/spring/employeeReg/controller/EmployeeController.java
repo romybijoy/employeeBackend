@@ -1,6 +1,7 @@
 package com.java.spring.employeeReg.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.java.spring.employeeReg.entity.Department;
 import com.java.spring.employeeReg.entity.Employee;
 import com.java.spring.employeeReg.entity.ErrorMessage;
+import com.java.spring.employeeReg.error.DepartmentNotFoundException;
 import com.java.spring.employeeReg.error.EmployeeNotFoundException;
 import com.java.spring.employeeReg.repository.DepartmentRepository;
 import com.java.spring.employeeReg.service.EmployeeService;
@@ -38,12 +40,25 @@ public class EmployeeController {
 	private final Logger LOGGER= LoggerFactory.getLogger(EmployeeController.class);
 	
 	@PostMapping("/employees")
-	public Employee saveEmployee(@Valid @RequestBody Employee employee) {
+	public Employee saveEmployee(@Valid @RequestBody Employee employee) throws DepartmentNotFoundException {
 
 		LOGGER.info("Inside saveEmployee of EmployeeController");
 		
-		Department department = departmentRepository.findById(employee.getDepartment().getId()).get();
-		employee.setDepartment(department);
+		int id = (int) employee.getDepartment().getId();
+
+		if(id == 0){
+		
+			throw new DepartmentNotFoundException("Department id can't be empty");
+		
+	}else{
+		Optional<Department> department = departmentRepository.findById(employee.getDepartment().getId());
+		if(!department.isPresent()) {
+			throw new DepartmentNotFoundException("Department not available");
+		}
+          
+		employee.setDepartment(department.get());
+	}
+	
 		return employeeService.saveEmployee(employee);
 	}
 	
@@ -92,11 +107,24 @@ public class EmployeeController {
 	}
 	
 	@PutMapping("/employees/{id}")
-	public Employee updateEmployee(@Valid @RequestBody Employee employee, @PathVariable("id") Long employeeId) throws EmployeeNotFoundException {
+	public Employee updateEmployee(@Valid @RequestBody Employee employee, @PathVariable("id") Long employeeId) throws EmployeeNotFoundException, DepartmentNotFoundException {
 		LOGGER.info("Inside updateEmployee of EmployeeController");
 		
-		Department department = departmentRepository.findById(employee.getDepartment().getId()).get();
-		employee.setDepartment(department);
+
+		int id = (int) employee.getDepartment().getId();
+
+		if(id == 0){
+		
+			throw new DepartmentNotFoundException("Department id can't be empty");
+		
+	}else{
+		Optional<Department> department = departmentRepository.findById(employee.getDepartment().getId());
+		if(!department.isPresent()) {
+			throw new DepartmentNotFoundException("Department not available");
+		}
+          
+		employee.setDepartment(department.get());
+	}
 		return employeeService.updateEmployee(employee, employeeId);
 	}
 	

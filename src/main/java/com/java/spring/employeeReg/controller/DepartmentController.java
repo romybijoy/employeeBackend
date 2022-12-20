@@ -49,6 +49,13 @@ public class DepartmentController {
 		return departmentService.getDepartment(id);
 	}
 
+
+	@GetMapping("/departments/code/{code}")
+	public List<Department> getDepartmentByCode(@PathVariable("code") String code){
+		LOGGER.info("Inside getDepartment of DepartmentController");
+		return departmentService.getDepartmentByCode(code);
+	}
+
 	@PutMapping("/departments/{id}")
 	public Department updateDepartment(@Valid @RequestBody Department department, @PathVariable("id") Long id) throws DepartmentNotFoundException {
 		LOGGER.info("Inside updateDepartment of DepartmentController");

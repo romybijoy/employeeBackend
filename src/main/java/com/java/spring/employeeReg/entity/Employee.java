@@ -39,23 +39,24 @@ public class Employee implements Serializable{
 	private long employeeId;
 	
 	@NotNull(message = "Employee number is mandatory")
-	@Range(max = 999999999, message = "Maximum length limited to 10")
+	@Range(max = 999999999, message = "Maximum length limited to 10 digits long")
 	private int employeeNo;
 	
 	@NotBlank(message = "Employee name is mandatory")
-	@Length(max = 100)
+	@Length(max = 100, message = "Maximum employee name length limited to 100 characters long")
 	private String employeeName;
 	
-	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern =  "dd/MM/yyyy" )
+	@NotNull(message = "Date Of Joining is mandatory")
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern =  "dd/MM/yyyy")
 	private LocalDate dateOfJoining;
 	
-	
+	@NotNull(message = "Department is mandatory")
 	@OneToOne(fetch= FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "department")
 	private Department department;
 	
 	@NotNull(message = "Salary is mandatory")
-	@Range(max = 999999999, message = "Maximum salary amount length limited to 10")
+	@Range(max = 999999999, message = "Maximum salary amount limited to 10 digits long")
 	private int salary;
 	
 	

@@ -78,4 +78,10 @@ public class DepartmentServiceImpl implements DepartmentService{
 		departmentRepository.deleteById(id); 
 	}
 
+	@Override
+	public List<Department> getDepartmentByCode(String code) {
+		
+		return departmentRepository.findByCode(code);
+	}
+
 }

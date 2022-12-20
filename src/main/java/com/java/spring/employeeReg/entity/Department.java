@@ -30,5 +30,5 @@ public class Department {
 	
 	@NotBlank(message = "Department name is mandatory")
 	private String description;
-	
+
 }

@@ -21,4 +21,5 @@ public interface DepartmentService {
 
 	public void deleteDepartmentById(Long id) throws EmptyResultDataAccessException;
 
+    public List<Department> getDepartmentByCode(String code);
 }
